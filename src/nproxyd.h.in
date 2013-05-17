@@ -1,0 +1,58 @@
+/*
+ * NProxy - High performance HTTP Proxy Software/Library
+ *
+ * Copyright (C) 2008-2013, Massimo Cetra <massimo.cetra at gmail.com>
+ *
+ * Version: MPL 1.1
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * The Original Code is NProxy
+ *
+ * The Initial Developer of the Original Code is
+ * Massimo Cetra <massimo.cetra at gmail.com>
+ *
+ * Portions created by the Initial Developer are Copyright (C)
+ * the Initial Developer. All Rights Reserved.
+ *
+ * nproxyd.h
+ *
+ */
+
+#define NPROXY_DEFAULT_USER	"@NPROXY_USER@"
+#define NPROXY_DEFAULT_GROUP	"@NPROXY_GROUP@"
+
+#define NPROXY_CONFIG_DIR 	"@NPROXY_CONFIG_DIR@"
+#define NPROXY_CONFIG_FILE	"nproxyd.conf.xml"
+
+#define NPROXY_STATE_DIR	"@NPROXY_STATE_DIR@"
+#define NPROXY_LOG_DIR		"@NPROXY_LOG_DIR@"
+
+#cmakedefine HAVE_SIGPIPE		1
+#cmakedefine HAVE_SIGBUS		1
+#cmakedefine HAVE_SIGIO			1
+#cmakedefine HAVE_SIGPOLL		1
+#cmakedefine HAVE_SIGQUIT		1
+#cmakedefine HAVE_SIGINT		1
+#cmakedefine HAVE_SIGTERM		1
+#cmakedefine HAVE_SIGHUP		1
+#cmakedefine HAVE_SIGILL		1
+
+#cmakedefine HAVE_SYSLOG_H		1
+#cmakedefine HAVE_UNISTD_H		1
+#cmakedefine HAVE_GRP_H			1
+#cmakedefine HAVE_PWD_H			1
+
+void nproxy_log_reload(void);
+apr_status_t nproxy_log_setup(const char *conf_file);
+
+apr_status_t nproxy_log_init(apr_pool_t * pool, int do_stdout);
+void nproxy_log_destroy(void);

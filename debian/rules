@@ -1,0 +1,75 @@
+#!/usr/bin/make -f
+
+#include /usr/share/cdbs/1/rules/debhelper.mk
+#include /usr/share/cdbs/1/class/makefile.mk
+#Added simple-patchsys for Kubuntu
+#include /usr/share/cdbs/1/rules/simple-patchsys.mk
+
+DEB_DESTDIR=DESTDIR=$(CURDIR)/debian/tmp/
+
+#DEB_MAKE_ENVVARS += INSTALL_ROOT=debian/tmp/
+DEB_MAKE_INSTALL_TARGET = install $(DEB_DESTDIR)
+
+build:
+	mkdir -p build
+	cd build && \
+	$(DEB_DESTDIR) \
+	cmake ../ \
+		-DCMAKE_INSTALL_PREFIX="/usr/" \
+		-DLIB_INSTALL_DIR="/usr/lib/" \
+		-DNPROXY_CONFIG_DIR="/etc/nproxy/" \
+		-DNPROXY_STATE_DIR:STRING="/var/run/" \
+		-DNPROXY_LOG_DIR:STRING="/var/log/nproxy" \
+		-DNPROXY_CONFIG_DIR:STRING="/etc/nproxy" \
+		-DNPROXY_USER:STRING="nproxy" \
+		-DNPROXY_GROUP:STRING="nproxy"
+	dh_testdir
+	cd build && $(MAKE)
+
+install: build
+	dh_testdir
+	dh_testroot
+#	dh_clean -k
+	dh_installdirs
+	cd build && $(MAKE) $(DEB_MAKE_INSTALL_TARGET)
+
+binary-indep:
+	dh_testdir
+	dh_testroot
+	dh_installdocs -a
+	dh_installdebconf -a
+	dh_installchangelogs
+	dh_installman -a
+	dh_compress -a
+	dh_fixperms -a
+	dh_installdeb -a
+	dh_gencontrol -a
+
+binary-arch: build install
+	dh_testdir
+	dh_testroot
+	cp debian/monit/nproxy.monitrc debian/nproxy/etc/monit.d/nproxy.monitrc
+	find debian/nproxy-*/ -type d -name \.svn -print | xargs /bin/rm -rf
+	dh_installdebconf
+	dh_installlogrotate
+	dh_installinit -R --init-script=nproxy
+	dh_install
+	dh_link
+	dh_strip --dbg-package=nproxy-dbg
+	dh_compress
+	dh_fixperms
+	dh_installdeb
+	dh_makeshlibs
+	dh_shlibdeps
+	dh_gencontrol
+
+
+binary: binary-arch binary-indep
+	dh_md5sums
+	dh_builddeb
+
+clean:
+	rm -f debian/stamp-patched
+	rm -rf build
+	dh_clean
+

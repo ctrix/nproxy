@@ -1,0 +1,9 @@
+
+This directory contains the files required for OpenWRT Packages.
+
+Simply bootstrap a new Buildroot and copy this directory to
+ $buildroot/package
+and then you should see nproxy when running make menuconfig.
+
+don't forget to set the appropriate URL for the tgz file.
+

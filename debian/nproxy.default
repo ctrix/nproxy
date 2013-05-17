@@ -1,0 +1,13 @@
+#
+# This file allows you to modify the behaviour of NProxy init script.
+#
+
+# Should nfax start on boot ?
+
+NPROXY_START=no
+
+# Parameters to pass to Nproxy start command.
+# "nproxy -h" will show you all the avalaible parameters.
+
+NPROXY_PARAMETERS=""
+

@@ -1,0 +1,19 @@
+
+TODO
+====
+
+*This is a small list of TODO activities for the next future*
+
+- Readme.md to be completed
+- Windows Support
+- Write documentation for LUA interface
+- Improve documentation for libnproxy C interface
+- Support for Lua 5.2
+- Add examples
+- "ReSwig" configuration for CMake
+- Add an options to configure the log format output
+- cleanup headers (X-nproxy header, via, connection ...)
+- Improve network I/O to avoid packet fragmentation
+
+- Check al TODOs in the code for other minor tweaks to be done
+- Open a google group

@@ -1,0 +1,30 @@
+
+NOTE:
+-----
+
+By contributing code to the NProxy project in any form, including sending
+a pull request via Github, a code fragment or patch via private email or
+public discussion groups, you agree to release your code under the terms
+of the MPL 1.1 license that you can find in the COPYING file included in the NProxy
+source distribution. You will include MPL 1.1 license in the COPYING file
+within each source file that you contribute.
+
+
+# How to provide a patch for a new feature
+------------------------------------------
+
+1. Drop a message to the NProxy Google Group with your proposal.
+
+2. If in steps 1 you get an acknowledge from the project leaders, use the
+   following procedure to submit a patch:
+
+    a. Fork NProxy on github ( http://help.github.com/fork-a-repo/ )
+    b. Create a topic branch (git checkout -b my_branch)
+    c. Push to your branch (git push origin my_branch)
+    d. Initiate a pull request on github ( http://help.github.com/send-pull-requests/ )
+    e. Done :)
+
+Remember to use the do_intent.sh file to properly adapt tour code to the style
+used in NProxy.
+
+Thanks!

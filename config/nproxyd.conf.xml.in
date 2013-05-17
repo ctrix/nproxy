@@ -1,0 +1,63 @@
+
+<configuration name="nproxy.conf" description="NProxy">
+
+    <log-settings>
+        <!-- Log levels:
+                0  VERBOSE
+                1  CRITICAL
+                2  ERROR
+                3  WARNING
+                4  NOTICE
+                5  DEBUG
+        -->
+        <!-- When logging to a file, use those settings (empty file name disables this feature) -->
+        <param name="log-file" value="@LOG_INSTALL_DIR@/nproxy.log"/>
+        <param name="log-file-level" value="4"/>
+
+        <!-- Log to syslog with those parameters (empty ident disables this feature) -->
+        <param name="syslog-ident" value="nproxy"/>
+        <param name="syslog-level" value="4"/>
+    </log-settings>
+
+
+    <profiles>
+        <profile name="internal">
+            <param name="listen_address"        value="0.0.0.0" />
+            <param name="listen_port"           value="8080" />
+
+            <param name="bind_address"          value="" />
+
+            <param name="inactivity_timeout"    value="30" />
+            <param name="max_duration"          value="0" />
+
+            <param name="shape_after"           value="0" />
+            <param name="shape_bps"             value="0" />
+
+            <param name="template_dir"          value="@DATA_INSTALL_DIR@/templates" />
+
+            <param name="script_dir"            value="@SYSCONF_INSTALL_DIR@/scripts" />
+            <param name="script_file"           value="default.lua" />
+        </profile>
+
+<!--
+        <profile name="external">
+            <param name="listen_address"        value="::" />
+            <param name="listen_port"           value="80" />
+
+            <param name="bind_address"          value="" />
+
+            <param name="inactivity_timeout"    value="30" />
+            <param name="max_duration"          value="120" />
+
+            <param name="shape_after"           value="0" />
+            <param name="shape_bps"             value="0" />
+
+            <param name="template_dir"          value="@DATA_INSTALL_DIR@/templates" />
+
+            <param name="script_dir"            value="@SYSCONF_INSTALL_DIR@/scripts" />
+            <param name="script_file"           value="extern.lua" />
+        </profile>
+-->
+    </profiles>
+
+</configuration>

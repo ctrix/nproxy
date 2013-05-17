@@ -1,0 +1,7 @@
+debian/tmp/usr/sbin/nproxyd
+debian/tmp/usr/share/nproxy/
+debian/tmp/etc/nproxy/nproxyd.conf.xml
+debian/tmp/etc/nproxy/scripts/default.lua
+debian/tmp/etc/nproxy/scripts/extern.lua
+debian/tmp/etc/nproxy/scripts/_utils.lua
+debian/tmp/etc/nproxy/scripts/_strict.lua

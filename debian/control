@@ -1,0 +1,23 @@
+Source: nproxy
+Section: admin
+Priority: optional
+Maintainer: Massimo Cetra <massimo.cetra@gmail.it>
+Build-Depends: cdbs (>= 0.4.23-1.1), debhelper (>= 5), cmake, libapr1-dev, liblua5.1-0-dev
+Standards-Version: 3.7.2
+
+Package: nproxy
+Architecture: any
+Pre-Depends: adduser
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Suggests: monit
+Description: HTTP Programmable Proxy Daemon
+ nproxy is an high speed HTTP/HTTPS proxy
+
+Package: nproxy-dbg
+Section: debug
+Priority: extra
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: HTTP Programmable Proxy Daemon - Debug symbols
+ nproxy is an high speed HTTP/HTTPS proxy
+

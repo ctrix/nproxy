@@ -1,0 +1,40 @@
+#!/bin/sh /etc/rc.common
+
+START=50
+CFGFILE=/var/etc/nproxy/nproxyd.conf.xml
+
+section_enabled() {
+	config_get_bool enabled "$1" 'enabled' 0
+	[ $enabled -gt 0 ]
+}
+
+start() {
+	config_load 'nproxy'
+	config_foreach start_proxy 'nproxy'
+}
+
+stop() {
+	service_stop /usr/sbin/nproxyd
+}
+
+start_proxy() {
+	section_enabled "$1" || return 1
+	service_start /usr/sbin/nproxyd -c $CFGFILE
+}
+
+write_upstream() {
+	local type
+	local via
+	local target
+
+	config_get "type" "$1" "type"
+	config_get via "$1" via
+	config_get target "$1" target
+	[ -n "$target" ] && target=' "'"$target"'"'
+
+	[ "$type" == "proxy" -a -n "$via" ] && \
+		echo "upstream $via$target" >> $CFGFILE
+
+	[ "$type" == "reject" -a -n "$target" ] && \
+		echo "no upstream$target" >> $CFGFILE
+}

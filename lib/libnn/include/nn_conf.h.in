@@ -1,0 +1,54 @@
+
+#ifndef NNCORE_H
+#define NNCORE_H
+
+#include "apr.h"
+#include "apr_time.h"
+
+#cmakedefine HAVE_UNISTD_H	1
+
+
+#define APR_STATUS_SUCCESS APR_SUCCESS
+#define APR_STATUS_ERROR   !APR_SUCCESS
+#define APR_STATUS_RETRY   APR_EAGAIN
+#define APR_STATUS_NEXT    APR_INCOMPLETE
+
+#define apr_uint8_t unsigned char
+#define apr_int8_t char
+
+
+#ifdef WIN32
+#  define WARN_UNUSED
+#else
+#  define WARN_UNUSED __attribute__((warn_unused_result))
+#endif
+
+#ifdef UNUSED
+#elif defined(__GNUC__)
+#  define UNUSED(x) UNUSED_ ## x __attribute__((unused))
+#elif defined(__LCLINT__)
+#  define UNUSED(x) /*@unused@*/ x
+#else
+#  define UNUSED(x) x
+#endif
+
+
+
+#ifndef APR_PATH_SEPARATOR
+#define APR_PATH_SEPARATOR "/"
+#endif
+
+#ifdef WIN32
+#define apr_file_has_path(file) (file && (*file == '\\' || *(file +1) == ':' || *file == '/' || strstr(file, APR_PATH_SEPARATOR)))
+#else
+#define apr_file_has_path(file) (file && ((*file == '/') || strstr(file, APR_PATH_SEPARATOR)))
+#endif
+
+#define NN_INLINE
+// TODO #cmakedefine NN_INLINE 			@NN_INLINE@
+#endif
+
+#define apr_safe_free(mem) { if (mem !=NULL) free(mem); mem = NULL; }
+
+#define zstr(x)  ( ((x==NULL) || (*x == '\0')) ? 1 : 0)
+

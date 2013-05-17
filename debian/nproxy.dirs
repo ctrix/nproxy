@@ -1,0 +1,4 @@
+etc/nproxy
+etc/monit.d
+usr/sbin
+var/log/nproxy

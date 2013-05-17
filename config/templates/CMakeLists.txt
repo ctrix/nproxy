@@ -1,0 +1,16 @@
+
+IF ( NOT EXISTS $ENV{DESTDIR}/${DATA_INSTALL_DIR}/scripts/default.html )
+    INSTALL( FILES
+	    ${CMAKE_CURRENT_SOURCE_DIR}/default.html
+	    DESTINATION ${DATA_INSTALL_DIR}/templates/
+	    PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ
+       )
+ENDIF ( NOT EXISTS $ENV{DESTDIR}/${DATA_INSTALL_DIR}/scripts/default.html )
+
+IF ( NOT EXISTS $ENV{DESTDIR}/${DATA_INSTALL_DIR}/scripts/unconfigured.html )
+    INSTALL( FILES
+	    ${CMAKE_CURRENT_SOURCE_DIR}/unconfigured.html
+	    DESTINATION ${DATA_INSTALL_DIR}/templates/
+	    PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ
+       )
+ENDIF ( NOT EXISTS $ENV{DESTDIR}/${DATA_INSTALL_DIR}/scripts/unconfigured.html )

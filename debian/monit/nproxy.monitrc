@@ -1,0 +1,23 @@
+check process nproxyd with pidfile /var/run/nproxy/nproxy.pid
+    group nproxy
+    start program = "/etc/init.d/nproxy start"
+    stop  program = "/etc/init.d/nproxy stop"
+    # Checks http proxy server on localhost.
+    if failed port 8080 type TCP then restart
+    if 5 restarts within 5 cycles then timeout
+    depends on nproxy_bin
+    depends on nproxy_rc
+
+check file nproxy_bin with path /usr/sbin/nproxyd
+    group nproxy
+    if failed checksum then unmonitor
+    if failed permission 755 then unmonitor
+    if failed uid root then unmonitor
+    if failed gid daemon then unmonitor
+
+check file nproxy_rc with path /etc/init.d/nproxy
+    group nproxy
+    if failed checksum then unmonitor
+    if failed permission 755 then unmonitor
+    if failed uid root then unmonitor
+    if failed gid root then unmonitor

@@ -1,0 +1,11 @@
+/var/log/nproxy/nproxy.log  {
+	daily
+	missingok
+	compress
+	delaycompress
+	rotate 30
+	sharedscripts
+	postrotate
+	    /usr/sbin/invoke-rc.d nproxy rotate
+	endscript
+}
