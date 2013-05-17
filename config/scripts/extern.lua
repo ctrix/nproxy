@@ -40,7 +40,7 @@ function on_request(conn)
 
     -- If the host of the request doesn't match the DNS name of the proxy,
     -- then return 404 NOT FOUND
-    if ( host ~= "proxy.navynet.it" ) then
+    if ( host ~= "proxy.example.com" ) then
         return 404
     end
 

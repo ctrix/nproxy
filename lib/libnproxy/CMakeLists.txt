@@ -79,7 +79,7 @@ SET_TARGET_PROPERTIES(
     nproxy
     PROPERTIES
 	SOVERSION 1
-    PROJECT_LABEL "Navynet Proxy Library"
+    PROJECT_LABEL "NProxy Library"
 )
 
 IF (NOT APPLE AND NOT WIN32)

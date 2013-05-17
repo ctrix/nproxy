@@ -14,7 +14,7 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 
 NAME=nproxy
 USER=$NAME
-DESC="Nproxy - Navynet HTTP Proxy"
+DESC="Nproxy - High performance HTTP/1.1 Proxy"
 PIDFILE="/var/run/$NAME/$NAME.pid"
 DAEMON="/usr/sbin/nproxyd"
 

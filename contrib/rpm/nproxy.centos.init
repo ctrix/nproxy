@@ -2,7 +2,7 @@
 # Init file for Nproxy
 #
 # chkconfig: - 50 50
-# description: Navynet HTTP proxy daemon
+# description: NProxy - HTTP proxy daemon
 #
 # processname: /usr/sbin/nproxyd
 # config: /etc/nproxy/nproxy.conf.xml
