@@ -385,7 +385,7 @@ static apr_status_t parse_command_line(int argc, char *argv[]) {
         }
 
         if (argv[x] && !strcmp(argv[x], "-service")) {
-            //TODO
+            nproxy_win32_service_start();
         }
 
         if (argv[x] && !strcmp(argv[x], "-install")) {

@@ -5,14 +5,17 @@
 #define snprintf sprintf_s
 #define SERVICENAME_DEFAULT "NProxy"
 #define SERVICENAME_MAXLEN 256
-static char service_name[SERVICENAME_MAXLEN];
-
-/* event to signal shutdown (for you unix people, this is like a pthread_cond) */
-static HANDLE shutdown_event;
+#define KEYS_REGISTRY_POSITION "Software\\Ctrix\\NProxy"
 
 /* we need these vars to handle the service */
 SERVICE_STATUS_HANDLE hStatus;
 SERVICE_STATUS status;
+
+/* The service name */
+static char service_name[SERVICENAME_MAXLEN];
+
+/* event to signal shutdown (for you unix people, this is like a pthread_cond) */
+static HANDLE shutdown_event;
 
 /* Handler function for service start/stop from the service */
 void WINAPI ServiceCtrlHandler(DWORD control) {
@@ -147,8 +150,6 @@ static apr_status_t nproxy_win32_service_uninstall(void) {
     CloseServiceHandle(hSCManager);
     exit(0);
 }
-
-#define KEYS_REGISTRY_POSITION "Software\\Ctrix\\NProxy"
 
 static apr_status_t LoadRegValue(char *name, char *value, size_t vlen) {
     HKEY hkey;

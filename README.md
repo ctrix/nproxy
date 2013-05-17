@@ -23,10 +23,12 @@ Nproxy can be used in serveral cases. The following ones are only examples but t
 
 Feel free to write me and describe your experience!
 
+* * *
+
 Installation
 ------------
 
-The prerequisites are_
+The prerequisites are:
 - you must have CMake 2.4 (or greater)
 - you must have Lua (5.0 and 5.1 supported - 5.2 support is on the TODO list)
 - you must have APR - Apache Runtime Library 1.4 (or greater) installed. Should probably work with 1.3 as well.
@@ -54,6 +56,27 @@ Try to follow the details for Unix.
 
 Instructions will be posted as soon as support will be ready.
 
+### Debian Quick Howto
+
+Tou can build your Debian Package in 2 ways.
+
+Using pbuilder you have to:
+- clone the repository (see above)
+- create the source package
+    cd trunk (the directory where you cloned nproxy code in)
+    dpkg-buildpackage -S -uc
+- you will find in the upper directory 2 files. The important one is the .dsc file. So switch to that directory 
+    cd ..
+- and run pbuilder (Google may help you to configure it but it should be quite simple)
+    pbuilder --build nproxy_*.dsc (enter the proper file name)
+
+Using a quicker way you should:
+- clone the repository (see above) and switch to the directory where the code is
+- Start building your package with
+    dpkg-buildpackage
+
+You will find the .deb files in the upper directory.
+
 Configuration
 -------------
 
@@ -65,9 +88,39 @@ The first refers to logging, the second refers to the profiles (i'll tell you in
 
 ### Logging
 
+You can log to syslog and/or to a file.
+For both methods you can specify the log level, which is a number. The bigger, the more details you will receive.
+    1  CRITICAL
+    2  ERROR
+    3  WARNING
+    4  NOTICE
+    5  DEBUG
+
+Leave empty the log file name or the syslog ident if you want to disable that method.
+
+> NOTE that syslog does not work on windows.
+
+
 ### Profiles
+A profile is a particular configuration of NProxy which links a listening address/port with some configuration parameters and with a *WebPlan*.
+A *WebPlan*, as explained later, is the way to control NProxy logics.
 
+You can setup as many profiles you want.
 
+* listen_address
+* listen_port
+* bind_address
+* inactivity_timeout
+* max_duration
+
+* shape_after
+* shape_bps
+
+* template_dir
+* script_dir
+* script_file
+
+* * *
 
 Developement
 ------------
