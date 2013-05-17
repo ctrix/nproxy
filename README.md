@@ -23,6 +23,8 @@ Nproxy can be used in serveral cases. The following ones are only examples but t
 
 Feel free to write me and describe your experience!
 
+  
+  
 * * *
 
 Installation
@@ -107,20 +109,157 @@ A *WebPlan*, as explained later, is the way to control NProxy logics.
 
 You can setup as many profiles you want.
 
-* listen_address
-* listen_port
-* bind_address
-* inactivity_timeout
-* max_duration
+- *listen_address*
+    The address on which the profile will listen. You can specify any IPv4 or IPv6 address.
+    If you need to bind to any IPv4 address, use 0.0.0.0.
+    If you need to bind to any IPv6 and IPv4 address, use ::
+- *listen_port*
+    The port on which the profile will listen. Usually 8080 or 3128.
+- *bind_address* (optional)
+    The address on which all outgoing connections will bind to.
+    You can set it on-demand from the WebPlan.
+- *inactivity_timeout*
+    After how many seconds without data the connection should be dropped ?
+    You can set it on-demand from the WebPlan.
+- *max_duration*
+    What's the maximum duration of a connection ? Useful to block tunnels or long downloads.
+    You can set it on-demand from the WebPlan.
 
-* shape_after
-* shape_bps
+- *shape_after*
+    If you want to shape a download, after how many bytes the limit should kick in ?
+    You can set it on-demand from the WebPlan.
+- *shape_bps*
+    If you want to shape a download, how many bytes per second should be the download speed ?
+    You can set it on-demand from the WebPlan.
 
-* template_dir
-* script_dir
-* script_file
+- *template_dir*
+    Templates are HTML pages sent to the client in case of errors. Where are those templates located ?
+- *script_dir*
+    What is the directory containing the LUA files of the WebPlan ?
+- *script_file*
+    What is the main file of your WebPlan ?
 
-* * *
+WebPlan Howto
+-------------
+
+
+Lua Command Syntax
+------------------
+
+All LUA command are in the nproxy package and namespace.
+
+The list of command is the following:
+
+- nmail.logmsg(level, message);
+    does not return anything
+
+- nmail.profile_get_script_dir(connection);
+    returns a string
+
+### Connection commands
+
+- nmail.connection_set_authuser(connection, name);
+    does not return anything
+
+- nmail.connection_get_authuser(connection);
+    returns a string
+
+- nmail.connection_set_variable(connection, name, value);
+    does not return anything
+
+- nmail.connection_get_variable(connection, name);
+    returns a string
+
+
+- nmail.connection_set_inactivity_timeout(connection, int secs);
+    does not return anything
+
+- nmail.connection_set_max_duration(connection, int secs);
+    does not return anything
+
+- nmail.connection_set_traffic_shaper(connection, size_t unshaped_bytes, size_t bytes_per_sec);
+    does not return anything
+
+
+### Request commands
+
+- nmail.request_force_upstream(connection, host, int port);
+    does not return anything
+
+- nmail.request_force_bind(connection, host);
+    does not return anything
+
+- nmail.request_require_auth(connection, type, realm);
+    does not return anything
+
+- nmail.request_set_traffic_limit(connection, size_t in, size_t out);
+    does not return anything
+
+- nmail.request_set_traffic_shaper(connection, size_t unshaped_bytes, size_t bytes_per_sec);
+    does not return anything
+
+
+- nmail.request_change_url(connection, url);
+    does not return anything
+
+- nmail.request_get_header(connection, h);
+    returns a string
+
+- nmail.request_get_header_next(connection, h);
+    returns a string
+
+- nmail.request_del_header(connection, h);
+    does not return anything
+
+- nmail.request_del_header_current(connection);
+    does not return anything
+
+- nmail.request_add_header(connection, h);
+    does not return anything
+
+- nmail.request_replace_header_current(connection, h);
+    does not return anything
+
+
+- nmail.int request_is_transparent(connection);
+    returns 1, respectively, if the request is transparent, 0 otherwise
+
+- nmail.request_get_host(connection);
+    returns a string
+
+- nmail.int request_get_port(connection);
+    returns a number
+
+- nmail.request_get_method(connection);
+    returns a string
+
+- nmail.request_get_url(connection);
+    returns a string
+
+- nmail.int request_get_protocol(connection);
+
+
+# Response commands
+
+- nmail.response_get_header(connection, h);
+
+- nmail.response_get_header_next(connection, h);
+
+- nmail.response_del_header(connection, h);
+    does not return anything
+
+- nmail.response_del_header_current(connection);
+    does not return anything
+
+- nmail.response_add_header(connection, h);
+    does not return anything
+
+- nmail.response_replace_header_current(connection, h);
+    does not return anything
+
+- nmail.int response_get_code(connection);
+
+
 
 Developement
 ------------
@@ -132,3 +271,6 @@ Authors
 -------
 
 [Massimo Cetra](http://www.ctrix.it/)
+
+* * *
+
