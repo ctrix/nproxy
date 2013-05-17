@@ -46,7 +46,7 @@ APR_DECLARE(nproxy_profile_t *) nproxy_profile_create(const char *name) {
     p = apr_pcalloc(pool, sizeof(nproxy_profile_t));
     if (p != NULL) {
         p->pool = pool;
-        p->name = apr_pool_strdup(pool, name);
+        p->name = apr_pstrdup(pool, name);
 
         apr_pollset_create(&p->pollset, DEFAULT_POLLSET_NUM, pool, 0);
 #ifdef apr_pollset_method_name
@@ -82,7 +82,7 @@ APR_DECLARE(apr_status_t) nproxy_profile_set_listen(nproxy_profile_t * profile, 
         return APR_STATUS_SUCCESS;
     }
 
-    profile->listen_address = apr_pool_strdup(profile->pool, address);
+    profile->listen_address = apr_pstrdup(profile->pool, address);
     profile->listen_port = port;
 
     return APR_STATUS_SUCCESS;
@@ -96,7 +96,7 @@ APR_DECLARE(apr_status_t) nproxy_profile_set_bind(nproxy_profile_t * profile, co
         return APR_STATUS_SUCCESS;
     }
 
-    profile->bind_address = apr_pool_strdup(profile->pool, address);
+    profile->bind_address = apr_pstrdup(profile->pool, address);
 
     return APR_STATUS_SUCCESS;
 }
@@ -151,7 +151,7 @@ APR_DECLARE(apr_status_t) nproxy_profile_set_template_dir(nproxy_profile_t * pro
     }
 
     if (apr_is_dir(profile->pool, dir) == APR_STATUS_SUCCESS) {
-        profile->template_dir = apr_pool_strdup(profile->pool, dir);
+        profile->template_dir = apr_pstrdup(profile->pool, dir);
         return APR_STATUS_SUCCESS;
     }
 
@@ -166,7 +166,7 @@ APR_DECLARE(apr_status_t) nproxy_profile_set_script_dir(nproxy_profile_t * profi
     }
 
     if (apr_is_dir(profile->pool, dir) == APR_STATUS_SUCCESS) {
-        profile->script_dir = apr_pool_strdup(profile->pool, dir);
+        profile->script_dir = apr_pstrdup(profile->pool, dir);
         return APR_STATUS_SUCCESS;
     }
 
@@ -182,7 +182,7 @@ APR_DECLARE(apr_status_t) nproxy_profile_set_luascript(nproxy_profile_t * profil
     }
 
     if (apr_file_has_path(path)) {
-        profile->luascript = apr_pool_strdup(profile->pool, path);
+        profile->luascript = apr_pstrdup(profile->pool, path);
     } else if (!zstr(profile->script_dir)) {
         int len;
         char *str = NULL;

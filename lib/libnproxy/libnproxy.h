@@ -36,6 +36,10 @@
 #define APR_POOL_DEBUG TRUE
 #endif
 
+#ifdef WIN32 
+#define snprintf sprintf_s
+#endif
+
 #include <assert.h>
 #include <stdlib.h>
 

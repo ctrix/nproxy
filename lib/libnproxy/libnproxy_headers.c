@@ -121,7 +121,7 @@ void clear_header_current(nproxy_request_headers_t * headers) {
 
 static int find_empty_header(nproxy_request_headers_t * headers) {
     apr_size_t t;
-    ssize_t last_empty;
+    apr_ssize_t last_empty;
     char *h;
 
     last_empty = 0;
@@ -141,7 +141,7 @@ static int find_empty_header(nproxy_request_headers_t * headers) {
 }
 
 void add_header(nproxy_connection_t * conn, nproxy_request_headers_t * headers, const char *text) {
-    ssize_t e;
+    apr_ssize_t e;
     char *h;
 
     assert(headers);
@@ -179,7 +179,7 @@ void add_header(nproxy_connection_t * conn, nproxy_request_headers_t * headers, 
         return;
     }
 
-    h = apr_pool_strdup(conn->pool, text);
+    h = apr_pstrdup(conn->pool, text);
     if (!h) {
         nn_log(NN_LOG_ERROR, "Cannot add header. No space left to dup.");
     } else {
@@ -190,7 +190,7 @@ void add_header(nproxy_connection_t * conn, nproxy_request_headers_t * headers, 
 }
 
 void replace_header_current(nproxy_connection_t * conn, nproxy_request_headers_t * headers, const char *text) {
-    ssize_t t;
+    apr_ssize_t t;
     /* char *h; */
 
     assert(headers);
@@ -206,7 +206,7 @@ void replace_header_current(nproxy_connection_t * conn, nproxy_request_headers_t
         headers->lines[t] = NULL;
     } else {
         char *nh;
-        nh = apr_pool_strdup(conn->pool, text);
+        nh = apr_pstrdup(conn->pool, text);
         if (nh) {
             headers->lines[t] = nh;
         }

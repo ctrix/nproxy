@@ -98,7 +98,7 @@ char *base64_decode(apr_pool_t * pool, const char *in) {
 
     buf[n] = '\0';
 
-    return apr_pool_strdup(pool, buf);
+    return apr_pstrdup(pool, buf);
 }
 
 int basic_challenge_auth(nproxy_connection_t * conn, const char *digest) {

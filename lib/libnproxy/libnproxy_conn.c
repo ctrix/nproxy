@@ -56,7 +56,7 @@ apr_status_t nproxy_connection_set_variable(nproxy_connection_t * conn, const ch
         }
     }
 
-    value = apr_pool_strdup(conn->pool, varvalue);
+    value = apr_pstrdup(conn->pool, varvalue);
 
 #if DEBUG_CONNECTION >= 1
     nn_log(NN_LOG_DEBUG, "Setting variable '%s' with value '%s'", varname, value ? value : "[empty]");
@@ -212,7 +212,7 @@ static apr_status_t request_send_response_headers(nproxy_connection_t * conn, np
 static apr_status_t request_send_request_headers(nproxy_connection_t * conn, nproxy_request_t * req) {
     apr_size_t len = 0;
     char *line = NULL;
-    ssize_t ret = 0;
+    apr_ssize_t ret = 0;
 
     (void) ret;
 
@@ -274,7 +274,7 @@ static apr_status_t parse_server_headers(nproxy_connection_t * conn, nproxy_requ
         return APR_STATUS_ERROR;
     }
 
-    if (!(request = apr_pool_strdup(conn->pool, headers->lines[0]))) {
+    if (!(request = apr_pstrdup(conn->pool, headers->lines[0]))) {
         return APR_STATUS_ERROR;
     }
 
@@ -393,7 +393,7 @@ static apr_status_t parse_client_headers(nproxy_connection_t * conn, nproxy_requ
     headers->content_len = -1;
     headers->must_close = 0;
 
-    if (!(request = apr_pool_strdup(conn->pool, headers->lines[0]))) {
+    if (!(request = apr_pstrdup(conn->pool, headers->lines[0]))) {
         return APR_STATUS_ERROR;
     }
     if (request) {
@@ -486,7 +486,7 @@ static apr_status_t parse_client_headers(nproxy_connection_t * conn, nproxy_requ
         if ((c = strchr(skipped_type, '/')) != NULL) {
             req->url = c;
         } else {
-            req->url = apr_pool_strdup(conn->pool, "/Uh?");
+            req->url = apr_pstrdup(conn->pool, "/Uh?");
         }
     } else if (!strcmp(req->method, "CONNECT")) {
         char *c = NULL;
@@ -525,7 +525,7 @@ static apr_status_t parse_client_headers(nproxy_connection_t * conn, nproxy_requ
             return APR_STATUS_ERROR;
         }
 
-        req->host = apr_pool_strdup(conn->pool, host);  /* We can't reuse the conn->host already allocated. It may be too small. */
+        req->host = apr_pstrdup(conn->pool, host);  /* We can't reuse the conn->host already allocated. It may be too small. */
         while (req->host && *req->host == ' ') {
             req->host++;
         }
@@ -661,7 +661,7 @@ static apr_status_t unpack_headers(nproxy_connection_t * conn, nproxy_connection
         }
 
         headers->rawlen = hsize;
-        headers->raw = apr_pool_strdup(conn->pool, lines);
+        headers->raw = apr_pstrdup(conn->pool, lines);
 
         // Count the lines in the header
         hl = lines;
@@ -684,7 +684,7 @@ static apr_status_t unpack_headers(nproxy_connection_t * conn, nproxy_connection
             nn_log(NN_LOG_ERROR, "Cannot separate header lines");
             return APR_STATUS_ERROR;
         } else {
-            ssize_t t;
+            apr_ssize_t t;
             char *h = NULL;
 
             for (t = 0; t < hlines; t++) {
@@ -1514,7 +1514,7 @@ static void on_server_read(nproxy_connection_t * conn) {
                     msleep = 0.02;
                 }
 
-                apr_sleep(msleep * APR_USEC_PER_SEC);
+                apr_sleep( (apr_interval_time_t) msleep * APR_USEC_PER_SEC);
             }
         }
     }
@@ -1553,7 +1553,7 @@ static void on_server_read(nproxy_connection_t * conn) {
                     msleep = 0.02;
                 }
 
-                apr_sleep(msleep * APR_USEC_PER_SEC);
+                apr_sleep( (apr_interval_time_t)msleep * APR_USEC_PER_SEC);
             }
         }
     }
@@ -1618,7 +1618,7 @@ static void client_timer_inactivity_check(nproxy_connection_t * conn) {
     now = apr_time_now();
 
     if (conn->last_io && conn->inactivity_timeout) {
-        apr_int32_t diff = apr_time_as_msec(now - conn->last_io);
+        apr_int32_t diff = (apr_int32_t) apr_time_as_msec(now - conn->last_io);
         if (diff >= conn->inactivity_timeout * 1000) {
 #if DEBUG_CONNECTION >= 2
             nn_log(NN_LOG_DEBUG, "IO Inactivity timeout, disconnecting client");
@@ -1649,7 +1649,7 @@ static void client_timer_maxduration_check(nproxy_connection_t * conn) {
     now = apr_time_now();
 
     if (conn->started && conn->max_duration) {
-        apr_int32_t diff = apr_time_as_msec(now - conn->started);
+        apr_int32_t diff = (apr_int32_t) apr_time_as_msec(now - conn->started);
         if (diff >= conn->max_duration * 1000) {
 #if DEBUG_CONNECTION >= 2
             nn_log(NN_LOG_DEBUG, "Max connection duration reached, disconnecting");

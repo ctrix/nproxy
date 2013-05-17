@@ -65,7 +65,7 @@ char *profile_get_script_dir(nproxy_connection_t * conn) {
 
 void connection_set_authuser(nproxy_connection_t * conn, const char *name) {
     if (conn && !zstr(name)) {
-        conn->auth_user = apr_pool_strdup(conn->pool, name);
+        conn->auth_user = apr_pstrdup(conn->pool, name);
     }
     return;
 }
@@ -142,7 +142,7 @@ void request_force_upstream(nproxy_connection_t * conn, const char *host, int po
 
     nn_log(NN_LOG_DEBUG, "Forcing upstream to %s:%d", host, port);
 
-    conn->requests->force_host = apr_pool_strdup(conn->pool, host);
+    conn->requests->force_host = apr_pstrdup(conn->pool, host);
     conn->requests->force_port = port;
 
     return;
@@ -164,7 +164,7 @@ void request_force_bind(nproxy_connection_t * conn, const char *host) {
 
     nn_log(NN_LOG_DEBUG, "Forcing bind address to %s", host);
 
-    conn->requests->force_bind = apr_pool_strdup(conn->pool, host);
+    conn->requests->force_bind = apr_pstrdup(conn->pool, host);
 
     return;
 }
@@ -173,7 +173,7 @@ void request_require_auth(nproxy_connection_t * conn, char *type, const char *re
 
     if (conn->requests && type && realm && strlen(realm)) {
         conn->requests->require_auth = 1;
-        conn->requests->auth_realm = apr_pool_strdup(conn->pool, realm);
+        conn->requests->auth_realm = apr_pstrdup(conn->pool, realm);
     }
 
     return;
@@ -217,7 +217,7 @@ void request_change_url(nproxy_connection_t * conn, const char *url) {
         url = "/";
     }
 
-    conn->requests->url = apr_pool_strdup(conn->pool, url);
+    conn->requests->url = apr_pstrdup(conn->pool, url);
 
     return;
 }

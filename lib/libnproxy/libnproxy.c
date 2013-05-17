@@ -62,7 +62,7 @@ APR_DECLARE(apr_status_t) nproxy_init(const char *servername) {
         return APR_STATUS_ERROR;
     }
 
-    config->servername = apr_pool_strdup(main_pool, servername);
+    config->servername = apr_pstrdup(main_pool, servername);
     config->initialized = 1;
     config->stopped = 0;
 

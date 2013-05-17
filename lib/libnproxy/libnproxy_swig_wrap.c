@@ -2694,7 +2694,7 @@ extern "C" {
   added at the very end of the code
   the function is always called SWIG_init, but an eariler #define will rename it
 */
-    SWIGEXPORT int SWIG_init(lua_State * L) {
+    int SWIG_init(lua_State * L) {
         int i;
         /* start with global table */
          lua_pushvalue(L, LUA_GLOBALSINDEX);
