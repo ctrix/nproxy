@@ -30,6 +30,14 @@
 #include <string.h>
 #include <ctype.h>
 
+#ifdef WIN32 
+#include <io.h> 
+#define snprintf sprintf_s
+#define open _open
+#define read _read
+#define close _close 
+#endif
+
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif

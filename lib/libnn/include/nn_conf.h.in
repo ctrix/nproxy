@@ -5,7 +5,8 @@
 #include "apr.h"
 #include "apr_time.h"
 
-#cmakedefine HAVE_UNISTD_H	1
+#cmakedefine HAVE_UNISTD_H		1
+#cmakedefine HAVE_STRCASESTR	1
 
 
 #define APR_STATUS_SUCCESS APR_SUCCESS

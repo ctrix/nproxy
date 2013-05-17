@@ -34,12 +34,11 @@
 APR_DECLARE(apr_status_t) apr_file_exists(apr_pool_t * pool, const char *filename);
 APR_DECLARE(apr_status_t) apr_is_file(apr_pool_t * pool, const char *filename);
 APR_DECLARE(apr_status_t) apr_is_dir(apr_pool_t * pool, const char *filename);
-APR_DECLARE(char *) apr_pool_strdup(apr_pool_t * pool, const char *string);
 
 APR_DECLARE(void *) apr_pool_resize(apr_pool_t * pool, void *old_addr, const unsigned long old_byte_size, const unsigned long new_byte_size);
 
 APR_DECLARE(unsigned int) apr_separate_string(char *buf, char delim, char **array, unsigned int arraylen);
 
-static inline int apr_strlen_zero(const char *s) {
-    return ((s == NULL) || (*s == '\0'));
-}
+#ifndef HAVE_STRCASESTR
+APR_DECLARE(char *) strcasestr(const char* haystack, const char* needle);
+#endif
