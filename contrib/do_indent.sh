@@ -86,6 +86,7 @@ lib/libnproxy/libnproxy_utils.c
 src/nproxyd.c
 src/nproxyd.h.in
 src/nproxyd_log.c
+src/nproxyd_win32.c
 EOF
 )
 

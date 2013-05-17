@@ -148,22 +148,25 @@ APR_DECLARE(unsigned int) apr_separate_string(char *buf, char delim, char **arra
 #ifndef HAVE_STRCASESTR
         /* case-independent string matching, similar to strstr but
          * matching */
-APR_DECLARE(char *) strcasestr(const char* haystack, const char* needle) {
-        int i;
-        int nlength = (int) strlen (needle);
-        int hlength = (int) strlen (haystack);
+APR_DECLARE(char *) strcasestr(const char *haystack, const char *needle) {
+    int i;
+    int nlength = (int) strlen(needle);
+    int hlength = (int) strlen(haystack);
 
-        if (nlength > hlength) return NULL;
-        if (hlength <= 0) return NULL;
-        if (nlength <= 0) return (char*) haystack;
-
-        /* hlength and nlength > 0, nlength <= hlength */
-        for (i = 0; i <= (hlength - nlength); i++) {
-                if (strncasecmp (haystack + i, needle, nlength) == 0) {
-                        return (char *) haystack + i;
-                }
-        }
-        /* substring not found */
+    if (nlength > hlength)
         return NULL;
+    if (hlength <= 0)
+        return NULL;
+    if (nlength <= 0)
+        return (char *) haystack;
+
+    /* hlength and nlength > 0, nlength <= hlength */
+    for (i = 0; i <= (hlength - nlength); i++) {
+        if (strncasecmp(haystack + i, needle, nlength) == 0) {
+            return (char *) haystack + i;
+        }
+    }
+    /* substring not found */
+    return NULL;
 }
 #endif

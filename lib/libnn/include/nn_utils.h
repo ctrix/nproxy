@@ -40,5 +40,5 @@ APR_DECLARE(void *) apr_pool_resize(apr_pool_t * pool, void *old_addr, const uns
 APR_DECLARE(unsigned int) apr_separate_string(char *buf, char delim, char **array, unsigned int arraylen);
 
 #ifndef HAVE_STRCASESTR
-APR_DECLARE(char *) strcasestr(const char* haystack, const char* needle);
+APR_DECLARE(char *) strcasestr(const char *haystack, const char *needle);
 #endif

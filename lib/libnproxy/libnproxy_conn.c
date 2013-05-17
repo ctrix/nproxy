@@ -1514,7 +1514,7 @@ static void on_server_read(nproxy_connection_t * conn) {
                     msleep = 0.02;
                 }
 
-                apr_sleep( (apr_interval_time_t) msleep * APR_USEC_PER_SEC);
+                apr_sleep((apr_interval_time_t) msleep * APR_USEC_PER_SEC);
             }
         }
     }
@@ -1553,7 +1553,7 @@ static void on_server_read(nproxy_connection_t * conn) {
                     msleep = 0.02;
                 }
 
-                apr_sleep( (apr_interval_time_t)msleep * APR_USEC_PER_SEC);
+                apr_sleep((apr_interval_time_t) msleep * APR_USEC_PER_SEC);
             }
         }
     }

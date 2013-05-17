@@ -36,7 +36,7 @@
 #define APR_POOL_DEBUG TRUE
 #endif
 
-#ifdef WIN32 
+#ifdef WIN32
 #define snprintf sprintf_s
 #endif
 

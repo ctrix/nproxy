@@ -344,7 +344,8 @@ extern "C" {
                 ++f2;
             if (*f1 != *f2)
                 return (*f1 > *f2) ? 1 : -1;
-        } return (int) ((l1 - f1) - (l2 - f2));
+        }
+        return (int) ((l1 - f1) - (l2 - f2));
     }
 
 /*
@@ -817,7 +818,8 @@ it gets the address, casts it, then dereferences it */
              ret = (swig_module_info *) lua_touserdata(L, -1);
          lua_pop(L, 1);         /* tidy */
          return ret;
-    } SWIGRUNTIME void
+    }
+    SWIGRUNTIME void
      SWIG_Lua_SetModule(lua_State * L, swig_module_info * module) {
         /* add this all into the Lua registry: */
         lua_pushstring(L, "swig_runtime_data_type_pointer" SWIG_RUNTIME_VERSION SWIG_TYPE_TABLE_NAME);
