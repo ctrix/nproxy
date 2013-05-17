@@ -1,0 +1,10 @@
+build/
+
+debian/tmp/
+debian/files
+debian/*.log
+debian/*.debhelper
+debian/*.substvars
+
+debian/nproxy/
+debian/nproxy-dbg/
