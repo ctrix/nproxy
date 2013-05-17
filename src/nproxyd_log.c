@@ -29,6 +29,7 @@
 
 #include "nn_conf.h"
 
+#include "apr_strings.h"
 #include "apr_file_io.h"
 
 #include <stdio.h>
@@ -184,12 +185,12 @@ static apr_status_t log_parse_config(const char *cfname) {
 
             if (!strcasecmp(var, "log-file")) {
                 if (strlen(val)) {
-                    globals->log_file = apr_pool_strdup(global_pool, val);
+                    globals->log_file = apr_pstrdup(global_pool, val);
                 }
             } else if (!strcasecmp(var, "log-file-level")) {
                 globals->log_file_level = atoi(val);
             } else if (!strcasecmp(var, "syslog-ident")) {
-                globals->syslog_ident = apr_pool_strdup(global_pool, val);
+                globals->syslog_ident = apr_pstrdup(global_pool, val);
             } else if (!strcasecmp(var, "syslog-level")) {
                 globals->syslog_level = atoi(val);
             }

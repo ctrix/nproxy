@@ -70,14 +70,18 @@ IF( NOT NPROXY_CONFIG_DIR )
 ENDIF(NOT NPROXY_CONFIG_DIR )
 
 # TODO (only when debugging
-SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wstrict-prototypes -fomit-frame-pointer -O0 -g -ggdb")
-
+IF(CMAKE_COMPILER_IS_GNUCXX )
+	SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wstrict-prototypes -fomit-frame-pointer -O0 -g -ggdb")
+ENDIF(CMAKE_COMPILER_IS_GNUCXX )
 #*************************
 # Find required libraries
 #*************************
+ADD_DEFINITIONS(-DAPR_DECLARE_EXPORT)
 
 SET(APR_FIND_REQUIRED ON)
 SET(APR_FIND_QUIETLY ON)
+SET(APRUTIL_FIND_REQUIRED OFF)
+SET(APRUTIL_FIND_QUIETLY ON)
 INCLUDE(FindAPR)
 
 

@@ -79,6 +79,10 @@ static char *config_file = NULL;
 static char *pid_file = NULL;
 static int store = 0;
 
+#ifdef WIN32
+#include "nproxyd_win32.c"
+#endif
+
 static char *USAGE = "Optional parameters that nproxy may accepts\n" "   -c config file          alternate configuration file\n"
 #ifdef WIN32
     "   -store                  store config file path in registry\n"
