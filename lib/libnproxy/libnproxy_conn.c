@@ -744,7 +744,7 @@ static apr_status_t bridge_data(nproxy_connection_t * conn, side_t sideid, nprox
                 nn_log(NN_LOG_ERROR, "Error on bridged connection");
                 switch_off = 1;
             } else if (lts != bsize) {
-                nn_log(NN_LOG_ERROR, "Partially sent buffer content on non 'connect' connection (%zd over %zu bytes)", lts, bsize);
+                nn_log(NN_LOG_ERROR, "Partially sent buffer content on 'connect' connection (%zd over %zu bytes)", lts, bsize);
                 switch_off = 1;
                 (sideid == SIDE_BROWSER) ? (req->bytes_out += lts) : (req->bytes_in += lts);
                 (sideid == SIDE_BROWSER) ? (conn->bytes_out += lts) : (conn->bytes_in += lts);
@@ -1931,7 +1931,7 @@ void nproxy_connection_destroy(nproxy_connection_t * conn) {
 
     pool = conn->pool;
 
-#if DEBUG_CONNECTION >= 1 && defined(APR_POOL_DEBUG)
+#ifdef NP_POOL_DEBUG
     {
         apr_size_t s = apr_pool_num_bytes(pool, 1);
         nn_log(NN_LOG_DEBUG, "Connection pool size is %zu", (size_t) s);

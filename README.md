@@ -36,7 +36,7 @@ The prerequisites are:
 
 - you must have Lua (5.0 and 5.1 supported - 5.2 support is on the TODO list)
 
-- you must have APR - Apache Runtime Library 1.4 (or greater) installed. Should probably work with 1.3 as well.
+- you must have APR - Apache Runtime Library 1.2 (or greater) installed.
 
 
 ### Unix/Linux/[Free,Net,Open]BSD

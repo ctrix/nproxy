@@ -348,7 +348,7 @@ APR_DECLARE(apr_status_t) nproxy_profile_run(nproxy_profile_t * profile) {
 
     profile->running = 0;
 
-#if DEBUG_CONNECTION >= 1 && defined(APR_POOL_DEBUG)
+#ifdef NP_POOL_DEBUG
     {
 
         apr_size_t s = apr_pool_num_bytes(profile->pool, 1);
