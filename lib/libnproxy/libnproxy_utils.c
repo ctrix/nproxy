@@ -106,12 +106,6 @@ apr_socket_t *prepare_outgoing_socket(nproxy_connection_t * conn, const char *ho
         }
     }
 
-    rv = apr_socket_timeout_set(sock, 10 * APR_USEC_PER_SEC);   // TODO CONFIG VALUE
-    if (rv != APR_SUCCESS) {
-        nn_log(NN_LOG_ERROR, "Cannot set timeout value on outgoing socket");
-        return NULL;
-    }
-
     rv = apr_socket_connect(sock, sa);
     if (rv != APR_STATUS_SUCCESS) {
         if (bind_to) {

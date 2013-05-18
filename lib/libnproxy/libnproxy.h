@@ -32,8 +32,10 @@
 
 #define DEBUG_CONNECTION 0
 
-#if DEBUG_CONNECTION > 0
+#if DEBUG_CONNECTION > 99
+/* This is useful only when APR is compiled with pool debug, */
 #define APR_POOL_DEBUG TRUE
+#define NP_POOL_DEBUG TRUE
 #endif
 
 #ifdef WIN32

@@ -78,7 +78,7 @@ APR_DECLARE(void) nproxy_deinit(void) {
 
     /* The profiles must be shut down by the user of the library */
 
-#if DEBUG_CONNECTION >= 1 && defined(APR_POOL_DEBUG)
+#ifdef NP_POOL_DEBUG
     {
         apr_size_t s = apr_pool_num_bytes(main_pool, 1);
         nn_log(NN_LOG_DEBUG, "LibNProxy main pool size is %zu", (size_t) s);
