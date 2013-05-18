@@ -33,7 +33,10 @@
 #  define UNUSED(x) x
 #endif
 
-
+#ifndef apr_pool_create_core
+/* Support for APR 1.2 */
+#define apr_pool_create_core(x) apr_pool_create(x, NULL)
+#endif
 
 #ifndef APR_PATH_SEPARATOR
 #define APR_PATH_SEPARATOR "/"
