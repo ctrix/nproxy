@@ -1,17 +1,18 @@
 
-# NOTE. THIS IS NOT YET TESTED AND FOR SURE IT MUST BE FIXED. TODO
+# NOTE:
+# This should work but it's missing the init script and the log dir in the config file is wrong.
 
 # norootforbuild
 
 Name:           nproxyd
-Version:        0.1
+Version:        2013.05
 Release:        1
 Summary:        HTTP Programmable Proxy Daemon
 Group:          Network
-License:        Boh?
+License:        MPL 1.1
 Url:            https://github.com/ctrix/nproxy
 BuildRequires:  cmake
-PreReq:         lua-devel
+PreReq:         lua-devel apr-devel 
 Source:         %{name}-%{version}.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}--%{release}-root
 AutoReqProv:    on
@@ -30,10 +31,9 @@ rm -fr build_tree
 mkdir build_tree
 cd build_tree
 cmake -DCMAKE_INSTALL_PREFIX="%{_prefix}" \
-   -DLIB_INSTALL_DIR="%{_libdir}" \
-   -DNPROXY_CONFIG_DIR="%{_sysconfdir}/nproxy/" \
-   -DNPROXY_STATE_DIR:STRING="%{_var}/run/nproxy" \
-   -DNPROXY_LOG_DIR:STRING="%{_var}/log/nproxy" \
+   -DNPROXY_CONFIG_DIR="/etc/nproxy" \
+   -DNPROXY_STATE_DIR:STRING="/var/run" \
+   -DNPROXY_LOG_DIR:STRING="/var/log/nproxy" \
    -DNPROXY_USER:STRING="nproxy" \
    -DNPROXY_GROUP:STRING="nproxy" ../%{nproxydsrcdirname}
 make %{?_smp_mflags}
@@ -66,7 +66,11 @@ rm -rf build_tree
 #%attr(770,nproxy,nproxy) %config(noreplace) %{_sysconfdir}/monit.d/*
 #%doc %{_docdir}/nproxy-%{version}
 
+%pre
+getent group  nproxy >/dev/null || groupadd -f -r nproxy
+getent passwd nproxy >/dev/null || useradd -r -M -d / -s /sbin/nologin -c "NProxy system user" -g nproxy nproxy
+
 %changelog
-* Wed Mar 23 2010 foo@bar
+* Wed May 13 2013 mcetra@gmail.com
    Initial release
 
