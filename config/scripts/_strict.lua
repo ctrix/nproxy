@@ -1,8 +1,8 @@
 
-#
-# This file tries to prevent usage of variables with a global scope ina function
-# unless the variables are already declared.
-#
+--[[
+    This file tries to prevent usage of variables with a global scope ina function
+    unless the variables are already declared.
+--]]
 
 local g=_G
 module("Strict")
