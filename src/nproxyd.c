@@ -456,7 +456,7 @@ static apr_status_t parse_command_line(int argc, char *argv[]) {
                     nn_log(NN_LOG_ERROR, "We have detected problems with the config file. This isn't a regular file: %s", argv[x]);
                     exit(252);
                 }
-#ifdef WIN32
+#ifndef WIN32
                 if (argv[x][0] != '/') {
                     nn_log(NN_LOG_ERROR, "You must provide an absolute path for the alternate config file.");
                     exit(252);
