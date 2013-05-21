@@ -12,9 +12,10 @@
 <h1>{resp_errno} {resp_cause}</h1>
 
 <p>{resp_detail}</p>
+<p>{req_host}</p>
 
 <script type="text/javascript">
-    if ( "{req_method}" == "GET" && "{resp_errno}" == "500" ) {
+    if ( "{req_method}" == "GET" && parseInt({resp_errno}) >= 500 ) {
 	setTimeout("location.reload(true);", 60*1000);
     }
 </script>
