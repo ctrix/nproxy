@@ -5,6 +5,7 @@
 	delaycompress
 	rotate 30
 	sharedscripts
+	create 0600 nproxy nproxy
 	postrotate
 	    /usr/sbin/invoke-rc.d nproxy rotate
 	endscript
