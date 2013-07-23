@@ -1402,87 +1402,9 @@ static void adjust_read_buffer_size(nproxy_connection_t * conn) {
     return;
 }
 
-static apr_status_t server_force_disconnect(nproxy_connection_t * conn) {
-    nproxy_connection_side_t *side;
 
-    assert(conn);
-    side = conn->server;
-
-#if DEBUG_CONNECTION >= 1
-    nn_log(NN_LOG_DEBUG, "On server Disconnect");
-#endif
-
-    nn_buffer_reset(side->buffer);
-
-    if (side->sock == NULL) {
-        return APR_STATUS_SUCCESS;
-    }
-
-    if (side->sock) {
-        apr_pollset_remove(conn->pollset, &side->pfd);
-        while (apr_socket_close(side->sock) != APR_SUCCESS) {
-#if DEBUG_CONNECTION >= 1
-            nn_log(NN_LOG_DEBUG, "Closing server side socket");
-#endif
-            apr_sleep(10000);
-        }
-        side->sock = NULL;
-    }
-
-    if (side->server.is_connect) {
-        conn->terminated = 1;
-    }
-
-    side->server.is_connect = 0;
-    side->server.host = NULL;
-    side->server.port = 0;
-
-    if (conn->requests && conn->requests->response_headers.must_close
-/*
-	conn->requests->response_headers.proto == HTTP_10
-	||
-	conn->requests->response_headers.document_completed
-*/
-        ) {
-        conn->terminated = 1;
-    }
-
-    return APR_STATUS_SUCCESS;
-}
-
-static void on_server_disconnect(nproxy_connection_t * conn) {
-
-    assert(conn);
-
-    server_force_disconnect(conn);
-
-    //There is a problem here. When switching connection, this is triggered...
-    if (conn->requests && conn->requests->request_headers.count && (!conn->requests->response_headers.count || !conn->requests->response_headers.document_completed)
-        ) {
-        nproxy_connection_set_variable(conn, "custom_detail", "Remote server closed our connection.");
-        http_send_custom_response(conn, HTTP_SERVICE_UNAVALAIBLE);
-    } else {
-        conn->terminated = 1;
-    }
-    conn->terminated = 1;
-
-    return;
-}
-
-static void on_server_read(nproxy_connection_t * conn) {
-    apr_size_t tot;
-    apr_status_t rv;
-    nproxy_connection_side_t *side;
-    nproxy_request_t *req;
-
-    side = conn->server;
-    req = conn->requests;
-
-    if (conn->terminated) {
-        return;
-    }
-
-    adjust_read_buffer_size(conn);
+static void connection_request_sleep(nproxy_connection_t * conn) {
+    nproxy_request_t *req = conn->requests;
 
     /*
        Sleep baby sleep, Now that the night is over,
@@ -1566,6 +1488,90 @@ static void on_server_read(nproxy_connection_t * conn) {
         }
     }
 
+    return;
+}
+
+static apr_status_t server_force_disconnect(nproxy_connection_t * conn) {
+    nproxy_connection_side_t *side;
+
+    assert(conn);
+    side = conn->server;
+
+#if DEBUG_CONNECTION >= 1
+    nn_log(NN_LOG_DEBUG, "On server Disconnect");
+#endif
+
+    nn_buffer_reset(side->buffer);
+
+    if (side->sock == NULL) {
+        return APR_STATUS_SUCCESS;
+    }
+
+    if (side->sock) {
+        apr_pollset_remove(conn->pollset, &side->pfd);
+        while (apr_socket_close(side->sock) != APR_SUCCESS) {
+#if DEBUG_CONNECTION >= 1
+            nn_log(NN_LOG_DEBUG, "Closing server side socket");
+#endif
+            apr_sleep(10000);
+        }
+        side->sock = NULL;
+    }
+
+    if (side->server.is_connect) {
+        conn->terminated = 1;
+    }
+
+    side->server.is_connect = 0;
+    side->server.host = NULL;
+    side->server.port = 0;
+
+    if (conn->requests && conn->requests->response_headers.must_close
+/*
+	conn->requests->response_headers.proto == HTTP_10
+	||
+	conn->requests->response_headers.document_completed
+*/
+        ) {
+        conn->terminated = 1;
+    }
+
+    return APR_STATUS_SUCCESS;
+}
+
+static void on_server_disconnect(nproxy_connection_t * conn) {
+
+    assert(conn);
+
+    server_force_disconnect(conn);
+
+    //There is a problem here. When switching connection, this is triggered...
+    if (conn->requests && conn->requests->request_headers.count && (!conn->requests->response_headers.count || !conn->requests->response_headers.document_completed)
+        ) {
+        nproxy_connection_set_variable(conn, "custom_detail", "Remote server closed our connection.");
+        http_send_custom_response(conn, HTTP_SERVICE_UNAVALAIBLE);
+    } else {
+        conn->terminated = 1;
+    }
+    conn->terminated = 1;
+
+    return;
+}
+
+static void on_server_read(nproxy_connection_t * conn) {
+    apr_size_t tot;
+    apr_status_t rv;
+    nproxy_connection_side_t *side;
+
+    side = conn->server;
+
+    if (conn->terminated) {
+        return;
+    }
+
+    adjust_read_buffer_size(conn);
+    connection_request_sleep(conn);
+
     /*
        Read what we can ...
      */
@@ -1622,8 +1628,6 @@ static void client_timer_inactivity_check(nproxy_connection_t * conn) {
     if (conn->terminated) {
         return;
     }
-
-    adjust_read_buffer_size(conn);
 
     now = apr_time_now();
 
@@ -1712,6 +1716,9 @@ static void on_client_read(nproxy_connection_t * conn) {
     if (conn->terminated) {
         return;
     }
+
+    adjust_read_buffer_size(conn);
+    connection_request_sleep(conn);
 
     /*
        Read from our side of the connection ...
