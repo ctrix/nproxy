@@ -1373,6 +1373,35 @@ static apr_status_t buffer_parse(nproxy_connection_t * conn, side_t sideid) {
 
 /* ************************************************************************* */
 
+static void adjust_read_buffer_size(nproxy_connection_t * conn) {
+    nproxy_request_t *req = conn->requests;
+
+    /*
+       Adjust the read buffer size if "delay pools" are active.
+       We don't want to sleep more than 0.5 seconds each read so we limit the buffer size accordingly,
+       if it is necessary.
+     */
+    if (req && req->limit_bps && req->response_headers.content_sent > req->limit_max_size) {
+        if (conn->read_buffer_size > req->limit_bps / 2 + 1) {
+#if DEBUG_CONNECTION >= 7
+            nn_log(NN_LOG_DEBUG, "Limiting read buffer size to %zu (was %zu)", req->limit_bps / 2, conn->read_buffer_size);
+#endif
+            conn->read_buffer_size = req->limit_bps / 2 + 1;
+        }
+    }
+
+    if (conn && conn->limit_bps && conn->bytes_in > conn->limit_max_size) {
+        if (conn->read_buffer_size > conn->limit_bps / 2 + 1) {
+#if DEBUG_CONNECTION >= 7
+            nn_log(NN_LOG_DEBUG, "Limiting read buffer size to %zu (was %zu)", conn->limit_bps / 2, conn->read_buffer_size);
+#endif
+            conn->read_buffer_size = conn->limit_bps / 2 + 1;
+        }
+    }
+
+    return;
+}
+
 static apr_status_t server_force_disconnect(nproxy_connection_t * conn) {
     nproxy_connection_side_t *side;
 
@@ -1453,28 +1482,7 @@ static void on_server_read(nproxy_connection_t * conn) {
         return;
     }
 
-    /*
-       Adjust the read buffer size if "delay pools" are active.
-       We don't want to sleep more than 0.5 seconds each read so we limit the buffer size accordingly,
-       if it is necessary.
-     */
-    if (req && req->limit_bps && req->response_headers.content_sent > req->limit_max_size) {
-        if (conn->read_buffer_size > req->limit_bps / 2 + 1) {
-#if DEBUG_CONNECTION >= 7
-            nn_log(NN_LOG_DEBUG, "Limiting read buffer size to %zu (was %zu)", req->limit_bps / 2, conn->read_buffer_size);
-#endif
-            conn->read_buffer_size = req->limit_bps / 2 + 1;
-        }
-    }
-
-    if (conn && conn->limit_bps && conn->bytes_in > conn->limit_max_size) {
-        if (conn->read_buffer_size > conn->limit_bps / 2 + 1) {
-#if DEBUG_CONNECTION >= 7
-            nn_log(NN_LOG_DEBUG, "Limiting read buffer size to %zu (was %zu)", conn->limit_bps / 2, conn->read_buffer_size);
-#endif
-            conn->read_buffer_size = conn->limit_bps / 2 + 1;
-        }
-    }
+    adjust_read_buffer_size(conn);
 
     /*
        Sleep baby sleep, Now that the night is over,
@@ -1615,6 +1623,8 @@ static void client_timer_inactivity_check(nproxy_connection_t * conn) {
         return;
     }
 
+    adjust_read_buffer_size(conn);
+
     now = apr_time_now();
 
     if (conn->last_io && conn->inactivity_timeout) {
@@ -1703,6 +1713,9 @@ static void on_client_read(nproxy_connection_t * conn) {
         return;
     }
 
+    /*
+       Read from our side of the connection ...
+     */
     conn->last_io = apr_time_now();
 
     tot = conn->read_buffer_size - 1;
