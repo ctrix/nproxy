@@ -1402,7 +1402,6 @@ static void adjust_read_buffer_size(nproxy_connection_t * conn) {
     return;
 }
 
-
 static void connection_request_sleep(nproxy_connection_t * conn) {
     nproxy_request_t *req = conn->requests;
 
@@ -1429,7 +1428,7 @@ static void connection_request_sleep(nproxy_connection_t * conn) {
             nt = req->limit_started;
 
             shaped_len = req->request_headers.content_sent - req->limit_max_size;
-            elapsed  = (double) apr_time_as_msec(now - nt) / 1000;
+            elapsed = (double) apr_time_as_msec(now - nt) / 1000;
             expected = (double) shaped_len / req->limit_bps;
 
 #if DEBUG_CONNECTION >= 5
@@ -1463,15 +1462,13 @@ static void connection_request_sleep(nproxy_connection_t * conn) {
                     msleep_in = 0.02;
                 }
             }
-
 #if DEBUG_CONNECTION >= 5
             nn_log(NN_LOG_DEBUG, "Request - Sleep for REQUEST: %.2f    Sleep for RESPONSE: %.2f", msleep_in, msleep_out);
 #endif
-            if ( msleep_in > msleep_out ) {
-                apr_sleep((apr_interval_time_t)  (msleep_in * APR_USEC_PER_SEC) );
-            }
-            else {
-                apr_sleep( (apr_interval_time_t) (msleep_out * APR_USEC_PER_SEC) );
+            if (msleep_in > msleep_out) {
+                apr_sleep((apr_interval_time_t) (msleep_in * APR_USEC_PER_SEC));
+            } else {
+                apr_sleep((apr_interval_time_t) (msleep_out * APR_USEC_PER_SEC));
             }
         }
     }
@@ -1529,16 +1526,14 @@ static void connection_request_sleep(nproxy_connection_t * conn) {
                     msleep_in = 0.02;
                 }
             }
-
 #if DEBUG_CONNECTION >= 5
             nn_log(NN_LOG_DEBUG, "Connection - Sleep for REQUEST: %.2f    Sleep for RESPONSE: %.2f", msleep_in, msleep_out);
 #endif
 
-            if ( msleep_in > msleep_out ) {
-                apr_sleep((apr_interval_time_t)  (msleep_in * APR_USEC_PER_SEC) );
-            }
-            else {
-                apr_sleep( (apr_interval_time_t) (msleep_out * APR_USEC_PER_SEC) );
+            if (msleep_in > msleep_out) {
+                apr_sleep((apr_interval_time_t) (msleep_in * APR_USEC_PER_SEC));
+            } else {
+                apr_sleep((apr_interval_time_t) (msleep_out * APR_USEC_PER_SEC));
             }
 
         }
