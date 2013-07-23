@@ -1422,29 +1422,56 @@ static void connection_request_sleep(nproxy_connection_t * conn) {
             nn_log(NN_LOG_DEBUG, "Enabling throttling (%zu - %zu)", req->limit_max_size, req->limit_bps);
 #endif
         } else {
+            double msleep_in;
+            double msleep_out;
+
             now = apr_time_now();
             nt = req->limit_started;
-            shaped_len = req->response_headers.content_sent - req->limit_max_size;
 
+            shaped_len = req->request_headers.content_sent - req->limit_max_size;
+            elapsed  = (double) apr_time_as_msec(now - nt) / 1000;
+            expected = (double) shaped_len / req->limit_bps;
+
+#if DEBUG_CONNECTION >= 5
+            nn_log(NN_LOG_DEBUG, "LIO REQ: %d  IN: %d  LEN: %zu   ELAPSED: %.2f  EXPEC: %.2f ", (int) conn->last_io, conn->bytes_in, shaped_len, elapsed, expected);
+#endif
+            if (elapsed < expected) {
+                msleep_out = expected - elapsed;
+                if (msleep_out > 0.5) {
+                    msleep_out = 0.5;
+                }
+
+                if (msleep_out <= 0) {
+                    msleep_out = 0.02;
+                }
+            }
+
+            shaped_len = req->response_headers.content_sent - req->limit_max_size;
             elapsed = (double) apr_time_as_msec(now - nt) / 1000;
             expected = (double) shaped_len / req->limit_bps;
 
 #if DEBUG_CONNECTION >= 5
-            nn_log(NN_LOG_DEBUG, "LIO: %d  IN: %d  LEN: %zu   ELAPSED: %.2f  EXPEC: %.2f ", (int) conn->last_io, conn->bytes_in, shaped_len, elapsed, expected);
+            nn_log(NN_LOG_DEBUG, "LIO RES: %d  IN: %d  LEN: %zu   ELAPSED: %.2f  EXPEC: %.2f ", (int) conn->last_io, conn->bytes_in, shaped_len, elapsed, expected);
 #endif
             if (elapsed < expected) {
-                double msleep;
-
-                msleep = expected - elapsed;
-                if (msleep > 0.5) {
-                    msleep = 0.5;
+                msleep_in = expected - elapsed;
+                if (msleep_in > 0.5) {
+                    msleep_in = 0.5;
                 }
 
-                if (msleep <= 0) {
-                    msleep = 0.02;
+                if (msleep_in <= 0) {
+                    msleep_in = 0.02;
                 }
+            }
 
-                apr_sleep((apr_interval_time_t) msleep * APR_USEC_PER_SEC);
+#if DEBUG_CONNECTION >= 5
+            nn_log(NN_LOG_DEBUG, "Request - Sleep for REQUEST: %.2f    Sleep for RESPONSE: %.2f", msleep_in, msleep_out);
+#endif
+            if ( msleep_in > msleep_out ) {
+                apr_sleep((apr_interval_time_t)  (msleep_in * APR_USEC_PER_SEC) );
+            }
+            else {
+                apr_sleep( (apr_interval_time_t) (msleep_out * APR_USEC_PER_SEC) );
             }
         }
     }
@@ -1461,30 +1488,59 @@ static void connection_request_sleep(nproxy_connection_t * conn) {
             nn_log(NN_LOG_DEBUG, "Enabling throttling (%zu - %zu)", conn->limit_max_size, conn->limit_bps);
 #endif
         } else {
+            double msleep_in;
+            double msleep_out;
+
             now = apr_time_now();
             then = conn->limit_started;
-            shaped_len = conn->bytes_in - conn->limit_max_size;
 
+            shaped_len = conn->bytes_out - conn->limit_max_size;
             elapsed = (double) apr_time_as_msec(now - then) / 1000;
             expected = (double) shaped_len / conn->limit_bps;
 
 #if DEBUG_CONNECTION >= 5
-            nn_log(NN_LOG_DEBUG, "LIO: %d  IN: %d  LEN: %zu   ELAPSED: %.2f  EXPEC: %.2f ", (int) conn->last_io, conn->bytes_in, shaped_len, elapsed, expected);
+            nn_log(NN_LOG_DEBUG, "LIO REQ: %d  IN: %d  LEN: %zu   ELAPSED: %.2f  EXPEC: %.2f ", (int) conn->last_io, conn->bytes_out, shaped_len, elapsed, expected);
 #endif
             if (elapsed < expected) {
-                double msleep;
-
-                msleep = expected - elapsed;
-                if (msleep > .5) {
-                    msleep = .5;
+                msleep_out = expected - elapsed;
+                if (msleep_out > .5) {
+                    msleep_out = .5;
                 }
 
-                if (msleep <= 0) {
-                    msleep = 0.02;
+                if (msleep_out <= 0) {
+                    msleep_out = 0.02;
                 }
-
-                apr_sleep((apr_interval_time_t) msleep * APR_USEC_PER_SEC);
             }
+
+            shaped_len = conn->bytes_in - conn->limit_max_size;
+            elapsed = (double) apr_time_as_msec(now - then) / 1000;
+            expected = (double) shaped_len / conn->limit_bps;
+
+#if DEBUG_CONNECTION >= 5
+            nn_log(NN_LOG_DEBUG, "LIO RES: %d  IN: %d  LEN: %zu   ELAPSED: %.2f  EXPEC: %.2f ", (int) conn->last_io, conn->bytes_in, shaped_len, elapsed, expected);
+#endif
+            if (elapsed < expected) {
+                msleep_in = expected - elapsed;
+                if (msleep_in > .5) {
+                    msleep_in = .5;
+                }
+
+                if (msleep_in <= 0) {
+                    msleep_in = 0.02;
+                }
+            }
+
+#if DEBUG_CONNECTION >= 5
+            nn_log(NN_LOG_DEBUG, "Connection - Sleep for REQUEST: %.2f    Sleep for RESPONSE: %.2f", msleep_in, msleep_out);
+#endif
+
+            if ( msleep_in > msleep_out ) {
+                apr_sleep((apr_interval_time_t)  (msleep_in * APR_USEC_PER_SEC) );
+            }
+            else {
+                apr_sleep( (apr_interval_time_t) (msleep_out * APR_USEC_PER_SEC) );
+            }
+
         }
     }
 
