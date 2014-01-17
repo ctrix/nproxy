@@ -1421,8 +1421,8 @@ static void connection_request_sleep(nproxy_connection_t * conn) {
             nn_log(NN_LOG_DEBUG, "Enabling throttling (%zu - %zu)", req->limit_max_size, req->limit_bps);
 #endif
         } else {
-            double msleep_in;
-            double msleep_out;
+            double msleep_in = 0.0;
+            double msleep_out = 0.0;
 
             now = apr_time_now();
             nt = req->limit_started;
@@ -1485,8 +1485,8 @@ static void connection_request_sleep(nproxy_connection_t * conn) {
             nn_log(NN_LOG_DEBUG, "Enabling throttling (%zu - %zu)", conn->limit_max_size, conn->limit_bps);
 #endif
         } else {
-            double msleep_in;
-            double msleep_out;
+            double msleep_in = 0.0;
+            double msleep_out = 0.0;
 
             now = apr_time_now();
             then = conn->limit_started;
