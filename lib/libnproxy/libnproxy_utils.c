@@ -81,17 +81,17 @@ apr_socket_t *prepare_outgoing_socket(nproxy_connection_t * conn, const char *ho
 
     /* TODO ASD Preference v4/v6 */
 
-    rv = apr_sockaddr_info_get(&sa, host, APR_INET, port, 0, pool);
+    //rv = apr_sockaddr_info_get(&sa, host, APR_INET, port, 0, pool);
     //rv = apr_sockaddr_info_get(&sa, host, APR_INET6, port, 0, pool);
-    //rv = apr_sockaddr_info_get(&sa, host, APR_UNSPEC, port, 0, pool);
+    rv = apr_sockaddr_info_get(&sa, host, APR_UNSPEC, port, APR_IPV6_ADDR_OK, pool);
     if (rv != APR_SUCCESS) {
-        nn_log(NN_LOG_ERROR, "Cannot get sockaddr info");
+        nn_log(NN_LOG_ERROR, "Cannot get sockaddr info for '%s'", host);
         return NULL;
     }
 
     rv = apr_socket_create(&sock, sa->family, SOCK_STREAM, APR_PROTO_TCP, pool);
     if (rv != APR_SUCCESS) {
-        nn_log(NN_LOG_ERROR, "Cannot create outgoing socket");
+        nn_log(NN_LOG_ERROR, "Cannot create outgoing socket for '%s'", host);
         return NULL;
     }
 
