@@ -222,50 +222,50 @@ All LUA command are in the nproxy package and namespace.
 
 The list of command is the following:
 
-- **nmail.logmsg(level, message)**
+- **nproxy.logmsg(level, message)**
 
     does not return anything
 
 
-- **nmail.profile_get_script_dir(connection)**
+- **nproxy.profile_get_script_dir(connection)**
 
     returns a string
 
 
 ### Connection commands
 
-- **nmail.connection_set_authuser(connection, name)**
+- **nproxy.connection_set_authuser(connection, name)**
 
     does not return anything
 
 
-- **nmail.connection_get_authuser(connection)**
+- **nproxy.connection_get_authuser(connection)**
 
     returns a string
 
 
-- **nmail.connection_set_variable(connection, name, value)**
+- **nproxy.connection_set_variable(connection, name, value)**
 
     does not return anything
 
 
-- **nmail.connection_get_variable(connection, name)**
+- **nproxy.connection_get_variable(connection, name)**
 
     returns a string
 
 
 
-- **nmail.connection_set_inactivity_timeout(connection, int secs)**
+- **nproxy.connection_set_inactivity_timeout(connection, int secs)**
 
     does not return anything
 
 
-- **nmail.connection_set_max_duration(connection, int secs)**
+- **nproxy.connection_set_max_duration(connection, int secs)**
 
     does not return anything
 
 
-- **nmail.connection_set_traffic_shaper(connection, size_t unshaped_bytes, size_t bytes_per_sec)**
+- **nproxy.connection_set_traffic_shaper(connection, size_t unshaped_bytes, size_t bytes_per_sec)**
 
     does not return anything
 
@@ -273,125 +273,125 @@ The list of command is the following:
 
 ### Request commands
 
-- **nmail.request_force_upstream(connection, host, int port)**
+- **nproxy.request_force_upstream(connection, host, int port)**
 
     does not return anything
 
 
-- **nmail.request_force_bind(connection, host)**
+- **nproxy.request_force_bind(connection, host)**
 
     does not return anything
 
 
-- **nmail.request_require_auth(connection, type, realm)**
+- **nproxy.request_require_auth(connection, type, realm)**
 
     does not return anything
 
 
-- **nmail.request_set_traffic_limit(connection, size_t in, size_t out)**
+- **nproxy.request_set_traffic_limit(connection, size_t in, size_t out)**
 
     does not return anything
 
 
-- **nmail.request_set_traffic_shaper(connection, size_t unshaped_bytes, size_t bytes_per_sec)**
+- **nproxy.request_set_traffic_shaper(connection, size_t unshaped_bytes, size_t bytes_per_sec)**
 
     does not return anything
 
 
 
-- **nmail.request_change_url(connection, url)**
+- **nproxy.request_change_url(connection, url)**
 
     does not return anything
 
 
-- **nmail.request_get_header(connection, h)**
+- **nproxy.request_get_header(connection, h)**
 
     returns a string
 
 
-- **nmail.request_get_header_next(connection, h)**
+- **nproxy.request_get_header_next(connection, h)**
 
     returns a string
 
 
-- **nmail.request_del_header(connection, h)**
+- **nproxy.request_del_header(connection, h)**
 
     does not return anything
 
 
-- **nmail.request_del_header_current(connection)**
+- **nproxy.request_del_header_current(connection)**
 
     does not return anything
 
 
-- **nmail.request_add_header(connection, h)**
+- **nproxy.request_add_header(connection, h)**
 
     does not return anything
 
 
-- **nmail.request_replace_header_current(connection, h)**
+- **nproxy.request_replace_header_current(connection, h)**
 
     does not return anything
 
 
 
-- **nmail.int request_is_transparent(connection)**
+- **nproxy.int request_is_transparent(connection)**
 
     returns 1, respectively, if the request is transparent, 0 otherwise
 
 
-- **nmail.request_get_host(connection)**
+- **nproxy.request_get_host(connection)**
 
     returns a string
 
 
-- **nmail.int request_get_port(connection)**
+- **nproxy.int request_get_port(connection)**
 
     returns a number
 
 
-- **nmail.request_get_method(connection)**
+- **nproxy.request_get_method(connection)**
 
     returns a string
 
 
-- **nmail.request_get_url(connection)**
+- **nproxy.request_get_url(connection)**
 
     returns a string
 
 
-- **nmail.int request_get_protocol(connection)**
+- **nproxy.int request_get_protocol(connection)**
 
 
 # Response commands
 
-- **nmail.response_get_header(connection, h)**
+- **nproxy.response_get_header(connection, h)**
 
 
-- **nmail.response_get_header_next(connection, h)**
+- **nproxy.response_get_header_next(connection, h)**
 
 
-- **nmail.response_del_header(connection, h)**
-
-    does not return anything
-
-
-- **nmail.response_del_header_current(connection)**
+- **nproxy.response_del_header(connection, h)**
 
     does not return anything
 
 
-- **nmail.response_add_header(connection, h)**
+- **nproxy.response_del_header_current(connection)**
 
     does not return anything
 
 
-- **nmail.response_replace_header_current(connection, h)**
+- **nproxy.response_add_header(connection, h)**
 
     does not return anything
 
 
-- **nmail.int response_get_code(connection)**
+- **nproxy.response_replace_header_current(connection, h)**
+
+    does not return anything
+
+
+- **nproxy.int response_get_code(connection)**
 
 
 
