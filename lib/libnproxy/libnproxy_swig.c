@@ -73,7 +73,6 @@ void connection_prefer_ipv6(nproxy_connection_t * conn) {
     return;
 }
 
-
 void connection_set_authuser(nproxy_connection_t * conn, const char *name) {
     if (conn && !zstr(name)) {
         conn->auth_user = apr_pstrdup(conn->pool, name);

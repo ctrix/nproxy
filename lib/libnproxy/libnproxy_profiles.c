@@ -47,7 +47,7 @@ APR_DECLARE(nproxy_profile_t *) nproxy_profile_create(const char *name) {
     if (p != NULL) {
         p->pool = pool;
         p->name = apr_pstrdup(pool, name);
-	p->ip_v_pref = APR_IPV6_ADDR_OK;
+        p->ip_v_pref = APR_IPV6_ADDR_OK;
 
         apr_pollset_create(&p->pollset, DEFAULT_POLLSET_NUM, pool, 0);
 #ifdef apr_pollset_method_name
@@ -117,11 +117,10 @@ APR_DECLARE(apr_status_t) nproxy_profile_set_maxclient(nproxy_profile_t * profil
 APR_DECLARE(apr_status_t) nproxy_profile_set_v6_preference(nproxy_profile_t * profile, int prefer_v6) {
     assert(profile);
 
-    if ( prefer_v6 != 0 ) {
-	profile->ip_v_pref = APR_IPV6_ADDR_OK;
-    }
-    else {
-	profile->ip_v_pref = APR_IPV4_ADDR_OK;
+    if (prefer_v6 != 0) {
+        profile->ip_v_pref = APR_IPV6_ADDR_OK;
+    } else {
+        profile->ip_v_pref = APR_IPV4_ADDR_OK;
     }
 
     return APR_STATUS_SUCCESS;
@@ -271,7 +270,7 @@ APR_DECLARE(apr_status_t) nproxy_profile_start(nproxy_profile_t * profile) {
     apr_socket_opt_set(sock, APR_TCP_DEFER_ACCEPT, 1);
 
     nn_log(NN_LOG_DEBUG, "Listening socket on %s:%d", profile->listen_address, profile->listen_port);
-    nn_log(NN_LOG_DEBUG, "Profile protocol precedence is %s", (profile->ip_v_pref == APR_IPV6_ADDR_OK) ? "IPv6":"IPv4" );
+    nn_log(NN_LOG_DEBUG, "Profile protocol precedence is %s", (profile->ip_v_pref == APR_IPV6_ADDR_OK) ? "IPv6" : "IPv4");
 
     profile->sock = sock;
 

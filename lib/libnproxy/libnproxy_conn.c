@@ -125,7 +125,9 @@ static void request_log(nproxy_connection_t * conn) {
             return;
         }
 
-        dur = (double) (apr_time_as_msec(apr_time_now() - req->started)) / 1000.0;
+        if (req->started != 0) {
+            dur = (double) (apr_time_as_msec(apr_time_now() - req->started)) / 1000.0;
+        }
 
         apr_socket_addr_get(&sa, APR_REMOTE, conn->sock);
         apr_sockaddr_ip_get(&ip, sa);
@@ -1932,9 +1934,9 @@ nproxy_connection_t *nproxy_connection_create(nproxy_profile_t * profile, apr_so
         c->sock = sock;
         c->pool = pool;
 
-	if ( profile != NULL ) {
-	    c->ip_v_pref = profile->ip_v_pref;
-	}
+        if (profile != NULL) {
+            c->ip_v_pref = profile->ip_v_pref;
+        }
 
         c->browser = apr_pcalloc(pool, sizeof(nproxy_connection_side_t));
         c->server = apr_pcalloc(pool, sizeof(nproxy_connection_side_t));

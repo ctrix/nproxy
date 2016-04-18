@@ -63,7 +63,7 @@ apr_status_t chomp(char *buffer, size_t length) {
     return APR_STATUS_SUCCESS;
 }
 
-apr_socket_t *prepare_outgoing_socket(nproxy_connection_t * conn, const char *host, int port, const char *bind_to, apr_int32_t sockflags ) {
+apr_socket_t *prepare_outgoing_socket(nproxy_connection_t * conn, const char *host, int port, const char *bind_to, apr_int32_t sockflags) {
     apr_sockaddr_t *sa = NULL;
     apr_socket_t *sock = NULL;
     apr_status_t rv;
@@ -81,17 +81,20 @@ apr_socket_t *prepare_outgoing_socket(nproxy_connection_t * conn, const char *ho
 
     /* TODO ASD Preference v4/v6 */
 
-    if ( (sockflags == APR_IPV6_ADDR_OK) || (sockflags == APR_IPV4_ADDR_OK) ) {
-	nn_log(NN_LOG_DEBUG, "Connection protocol precedence is %s", (conn->ip_v_pref == APR_IPV6_ADDR_OK) ? "IPv6":"IPv4" );
-	rv = apr_sockaddr_info_get(&sa, host, APR_UNSPEC, port, sockflags, pool);
-    }
-    else {
-	/* Use OS Defaults */
-	nn_log(NN_LOG_DEBUG, "Connection protocol precedence is OS defined" );
-	rv = apr_sockaddr_info_get(&sa, host, APR_UNSPEC, port, 0, pool);
+    if ((sockflags == APR_IPV6_ADDR_OK) || (sockflags == APR_IPV4_ADDR_OK)) {
+#if DEBUG_CONNECTION >= 5
+        nn_log(NN_LOG_DEBUG, "Connection protocol precedence is %s", (conn->ip_v_pref == APR_IPV6_ADDR_OK) ? "IPv6" : "IPv4");
+#endif
+        rv = apr_sockaddr_info_get(&sa, host, APR_UNSPEC, port, sockflags, pool);
+    } else {
+        /* Use OS Defaults */
+#if DEBUG_CONNECTION >= 5
+        nn_log(NN_LOG_DEBUG, "Connection protocol precedence is OS defined");
+#endif
+        rv = apr_sockaddr_info_get(&sa, host, APR_UNSPEC, port, 0, pool);
 
-	//rv = apr_sockaddr_info_get(&sa, host, APR_INET, port, 0, pool);
-	//rv = apr_sockaddr_info_get(&sa, host, APR_INET6, port, 0, pool);
+        //rv = apr_sockaddr_info_get(&sa, host, APR_INET, port, 0, pool);
+        //rv = apr_sockaddr_info_get(&sa, host, APR_INET6, port, 0, pool);
     }
     if (rv != APR_SUCCESS) {
         nn_log(NN_LOG_ERROR, "Cannot get sockaddr info for '%s'", host);
@@ -106,7 +109,7 @@ apr_socket_t *prepare_outgoing_socket(nproxy_connection_t * conn, const char *ho
 
     if (!zstr(bind_to)) {
         apr_sockaddr_t *sb;
-	// TODO QWE BINDING DO TEST IT
+        // TODO QWE BINDING DO TEST IT
         rv = apr_sockaddr_info_get(&sb, bind_to, APR_UNSPEC, 0, 0, pool);
         rv = apr_socket_bind(sock, sb);
         if (rv != APR_SUCCESS) {

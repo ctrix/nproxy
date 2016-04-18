@@ -29,12 +29,12 @@
 
 /* "USE swig -lua libnproxy_swig.i to RESWIG" */
 
-%module nproxy %{
+% module nproxy % {
 #include "nproxy.h"
 #include "libnproxy_swig.h"
 %}
 
-%wrapper %{
+%wrapper % {
     void lua_push_conn(lua_State * L, nproxy_connection_t * conn) {
         SWIG_NewPointerObj(L, conn, SWIGTYPE_p_nproxy_connection_t, 0);
     }

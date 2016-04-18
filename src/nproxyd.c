@@ -550,7 +550,7 @@ static apr_status_t nproxy_run_profiles(void) {
                 char *template_dir = NULL;
                 char *script_dir = NULL;
                 char *script = NULL;
-		int prefer_v6 = 0;
+                int prefer_v6 = 0;
 
                 nn_log(NN_LOG_NOTICE, "Starting profile '%s'", pname);
 
