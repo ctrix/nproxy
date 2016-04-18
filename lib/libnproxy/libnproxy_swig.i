@@ -27,12 +27,14 @@
  *
  */
 
-% module nproxy % {
+/* "USE swig -lua libnproxy_swig.i to RESWIG" */
+
+%module nproxy %{
 #include "nproxy.h"
 #include "libnproxy_swig.h"
 %}
 
-%wrapper % {
+%wrapper %{
     void lua_push_conn(lua_State * L, nproxy_connection_t * conn) {
         SWIG_NewPointerObj(L, conn, SWIGTYPE_p_nproxy_connection_t, 0);
     }
@@ -44,6 +46,9 @@ HTTP_09 = 0 HTTP_10 = 1 HTTP_11 = 2}
 void logmsg(const char *how, const char *msg);
 
 char *profile_get_script_dir(nproxy_connection_t * conn);
+
+void connection_prefer_ipv4(nproxy_connection_t * conn);
+void connection_prefer_ipv6(nproxy_connection_t * conn);
 
 void connection_set_authuser(nproxy_connection_t * conn, const char *name);
 char *connection_get_authuser(nproxy_connection_t * conn);

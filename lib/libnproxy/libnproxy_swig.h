@@ -40,6 +40,9 @@ void logmsg(const char *how, const char *msg);
 
 char *profile_get_script_dir(nproxy_connection_t * conn);
 
+void connection_prefer_ipv4(nproxy_connection_t * conn);
+void connection_prefer_ipv6(nproxy_connection_t * conn);
+
 void connection_set_authuser(nproxy_connection_t * conn, const char *name);
 char *connection_get_authuser(nproxy_connection_t * conn);
 void connection_set_variable(nproxy_connection_t * conn, const char *name, const char *value);

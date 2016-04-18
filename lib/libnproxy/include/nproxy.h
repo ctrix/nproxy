@@ -50,6 +50,7 @@ APR_DECLARE(apr_status_t) nproxy_profile_set_bind(nproxy_profile_t * profile, co
 TODO - Not yet implemented ...
 APR_DECLARE(apr_status_t) nproxy_profile_set_maxclient(nproxy_profile_t *profile, int max);
 */
+APR_DECLARE(apr_status_t) nproxy_profile_set_v6_preference(nproxy_profile_t * profile, int prefer_v6);
 APR_DECLARE(apr_status_t) nproxy_profile_set_inactivity_timeout(nproxy_profile_t * profile, int seconds);
 APR_DECLARE(apr_status_t) nproxy_profile_set_max_duration(nproxy_profile_t * profile, int seconds);
 APR_DECLARE(apr_status_t) nproxy_profile_set_shaper(nproxy_profile_t * profile, size_t after, size_t bps);

@@ -63,6 +63,17 @@ char *profile_get_script_dir(nproxy_connection_t * conn) {
     return NULL;
 }
 
+void connection_prefer_ipv4(nproxy_connection_t * conn) {
+    conn->ip_v_pref = APR_IPV4_ADDR_OK;
+    return;
+}
+
+void connection_prefer_ipv6(nproxy_connection_t * conn) {
+    conn->ip_v_pref = APR_IPV6_ADDR_OK;
+    return;
+}
+
+
 void connection_set_authuser(nproxy_connection_t * conn, const char *name) {
     if (conn && !zstr(name)) {
         conn->auth_user = apr_pstrdup(conn->pool, name);

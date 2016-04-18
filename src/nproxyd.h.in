@@ -56,3 +56,32 @@ apr_status_t nproxy_log_setup(const char *conf_file);
 
 apr_status_t nproxy_log_init(apr_pool_t * pool, int do_stdout);
 void nproxy_log_destroy(void);
+
+
+#define nproxyd_is_true(expr) \
+    ( (expr && \
+        ( !strcasecmp(expr, "yes") || \
+          !strcasecmp(expr, "on") || \
+          !strcasecmp(expr, "true") || \
+          !strcasecmp(expr, "enabled") || \
+          !strcasecmp(expr, "active") || \
+          !strcasecmp(expr, "allow") || \
+          !strcasecmp(expr, "1") \
+        ) \
+      ) \
+      ? 1 : 0 \
+    )
+
+#define nproxyd_is_false(expr) \
+    ( (expr && \
+        ( !strcasecmp(expr, "no") || \
+          !strcasecmp(expr, "off") || \
+          !strcasecmp(expr, "false") || \
+          !strcasecmp(expr, "disabled") || \
+          !strcasecmp(expr, "inactive") || \
+          !strcasecmp(expr, "disallow") || \
+          !strcasecmp(expr, "0") \
+        ) \
+      ) \
+      ? 1 : 0 \
+    )

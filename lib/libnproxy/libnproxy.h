@@ -200,6 +200,7 @@ struct nproxy_connection_s {
 
     char terminated;
 
+    apr_int32_t ip_v_pref;
     nproxy_connection_side_t *browser;
     nproxy_connection_side_t *server;
     nproxy_request_t *requests;
@@ -251,8 +252,7 @@ struct nproxy_profile_s {
     int listen_port;
 
     char *bind_address;
-    char disable_ipv4;
-    char disable_ipv6;
+    apr_int32_t ip_v_pref;
 
     int inactivity_timeout;
     int max_duration;
@@ -288,7 +288,7 @@ apr_status_t http_send_custom_response(nproxy_connection_t * conn, http_resp_cod
 /* UTILS */
 apr_status_t chomp(char *buffer, size_t length);
 size_t extract_chunk_size(nn_buffer_t * buf, int *action);
-apr_socket_t *prepare_outgoing_socket(nproxy_connection_t * conn, const char *host, int port, const char *bind_to);
+apr_socket_t *prepare_outgoing_socket(nproxy_connection_t * conn, const char *host, int port, const char *bind_to, apr_int32_t sockflags);
 
 /* HEADERS */
 char *find_header(nproxy_request_headers_t * headers, const char *header);

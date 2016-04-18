@@ -1196,7 +1196,7 @@ static apr_status_t buffer_parse(nproxy_connection_t * conn, side_t sideid) {
                 bind = conn->profile->bind_address;
             }
 
-            if ((sock = prepare_outgoing_socket(conn, host, port, bind)) == NULL) {
+            if ((sock = prepare_outgoing_socket(conn, host, port, bind, conn->ip_v_pref)) == NULL) {
                 nn_log(NN_LOG_ERROR, "Cannot connect to %s:%d", host, port);
 //TODO timeout or other error, try to figure out what's happened!
                 nproxy_connection_set_variable(conn, "custom_detail", "Cannot connect to remote host.");
@@ -1931,6 +1931,10 @@ nproxy_connection_t *nproxy_connection_create(nproxy_profile_t * profile, apr_so
         c->profile = profile;
         c->sock = sock;
         c->pool = pool;
+
+	if ( profile != NULL ) {
+	    c->ip_v_pref = profile->ip_v_pref;
+	}
 
         c->browser = apr_pcalloc(pool, sizeof(nproxy_connection_side_t));
         c->server = apr_pcalloc(pool, sizeof(nproxy_connection_side_t));

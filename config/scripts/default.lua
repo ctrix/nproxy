@@ -40,6 +40,13 @@ function on_connect (conn, ip)
     -- is shaped to max 250Kb/sec, by default
     nproxy.connection_set_traffic_shaper(conn, 0, 250 * 1024);
 
+
+    -- Do you prefer IPv6 or IPv4 ?
+    -- Here you can set your choice.
+    --nproxy.connection_prefer_ipv4(conn);
+    --nproxy.connection_prefer_ipv6(conn);
+
+
     -- be safe. Disallow connections if unconfigured.
     if ( configured == false ) then
         nproxy.logmsg("notice", "-----------------------------------")

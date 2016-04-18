@@ -27,6 +27,8 @@
 
             <param name="bind_address"          value="" />
 
+            <param name="prefer_ipv6"           value="true" />
+
             <param name="inactivity_timeout"    value="30" />
             <param name="max_duration"          value="0" />
 

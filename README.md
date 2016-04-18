@@ -170,6 +170,11 @@ You can setup as many profiles you want.
     The address on which all outgoing connections will bind to.
     You can set it on-demand from the WebPlan.
 
+- **prefer_ipv6** (default false)
+
+    If set to true, each connection will be over ipv6 if the host can be resolved.
+    Otherwise the connection will be directed to ipv4 hosts, first.
+
 
 - **inactivity_timeout**
 
@@ -253,6 +258,17 @@ The list of command is the following:
 
     returns a string
 
+
+- **nproxy.connection_prefer_ipv4(connection)**
+
+    Prefer IPv4 hosts over IPv6, if the host resolves to both addresses
+    does not return anything
+
+
+- **nproxy.connection_prefer_ipv6(connection)**
+
+    Prefer IPv6 hosts over IPv4, if the host resolves to both addresses
+    does not return anything
 
 
 - **nproxy.connection_set_inactivity_timeout(connection, int secs)**

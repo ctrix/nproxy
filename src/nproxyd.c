@@ -550,6 +550,7 @@ static apr_status_t nproxy_run_profiles(void) {
                 char *template_dir = NULL;
                 char *script_dir = NULL;
                 char *script = NULL;
+		int prefer_v6 = 0;
 
                 nn_log(NN_LOG_NOTICE, "Starting profile '%s'", pname);
 
@@ -576,6 +577,8 @@ static apr_status_t nproxy_run_profiles(void) {
                         l_port = atoi(value);
                     } else if (!strncmp(name, "bind_address", strlen("bind_address") + 1)) {
                         b_ip = value;
+                    } else if (!strncmp(name, "prefer_ipv6", strlen("prefer_ipv6") + 1)) {
+                        prefer_v6 = nproxyd_is_true(value);
                     } else if (!strncmp(name, "inactivity_timeout", strlen("inactivity_timeout") + 1)) {
                         in_timeout = atoi(value);
                     } else if (!strncmp(name, "max_duration", strlen("max_duration") + 1)) {
@@ -621,6 +624,7 @@ static apr_status_t nproxy_run_profiles(void) {
                     t_interval = 2000;
                 }
 
+                nproxy_profile_set_v6_preference(profile, prefer_v6);
                 nproxy_profile_set_listen(profile, l_ip, l_port);
                 nproxy_profile_set_bind(profile, b_ip);
                 nproxy_profile_set_inactivity_timeout(profile, in_timeout);
